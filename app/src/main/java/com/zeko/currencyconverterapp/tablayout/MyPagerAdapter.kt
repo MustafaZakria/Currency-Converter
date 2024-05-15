@@ -1,24 +1,25 @@
 package com.zeko.currencyconverterapp.tablayout
 
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
+import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.zeko.currencyconverterapp.fragments.ConverterFragment
 import com.zeko.currencyconverterapp.fragments.RatesFragment
+import com.zeko.currencyconverterapp.util.Constants.CONVERTER
+import com.zeko.currencyconverterapp.util.Constants.NUM_TABS
+import com.zeko.currencyconverterapp.util.Constants.RATES
 
-class MyPagerAdapter (fa: FragmentActivity) : FragmentStateAdapter(fa) {
+class MyPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
+    FragmentStateAdapter(fragmentManager, lifecycle) {
+
+    private val tabsName = arrayOf(CONVERTER, RATES)
 
     fun getPageTitle(position: Int): CharSequence {
-        return when (position) {
-            0 -> "converter"
-            else -> "rates"
-
-        }
+        return tabsName[position]
     }
 
-    override fun getItemCount(): Int = 2
+    override fun getItemCount(): Int = NUM_TABS
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
@@ -26,7 +27,7 @@ class MyPagerAdapter (fa: FragmentActivity) : FragmentStateAdapter(fa) {
                 ConverterFragment()
             }
             else -> {
-                return RatesFragment()
+                RatesFragment()
             }
         }
     }
