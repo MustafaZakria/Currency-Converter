@@ -1,4 +1,4 @@
-package com.zeko.currencyconverterapp
+package com.zeko.currencyconverterapp.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

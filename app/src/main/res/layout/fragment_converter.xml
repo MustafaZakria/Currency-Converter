@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingHorizontal="32dp"
-        tools:context=".fragments.ConverterFragment">
+        tools:context=".ui.fragments.ConverterFragment">
 
         <TextView
             android:id="@+id/tvTitle"
