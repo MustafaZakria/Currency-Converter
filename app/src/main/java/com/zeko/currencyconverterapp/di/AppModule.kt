@@ -1,18 +1,22 @@
 package com.zeko.currencyconverterapp.di
 
 import com.zeko.currencyconverterapp.data.models.CurrencyApi
+import com.zeko.currencyconverterapp.main.DefaultMainRepository
+import com.zeko.currencyconverterapp.main.MainRepository
 import com.zeko.currencyconverterapp.util.Constants.BASE_URL
+import com.zeko.currencyconverterapp.util.DispatcherProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
 import javax.inject.Singleton
 
 @Module
-@InstallIn(ApplicationComponent::class)
+@InstallIn(SingletonComponent::class)
 object AppModule {
     @Singleton
     @Provides
@@ -21,4 +25,21 @@ object AppModule {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
         .create(CurrencyApi::class.java)
+
+    @Singleton
+    @Provides
+    fun provideDefaultRepo(api: CurrencyApi): MainRepository = DefaultMainRepository(api)
+
+    @Singleton
+    @Provides
+    fun provideDispatchers(): DispatcherProvider = object : DispatcherProvider {
+        override val main: CoroutineDispatcher
+            get() = Dispatchers.Main
+        override val io: CoroutineDispatcher
+            get() = Dispatchers.IO
+        override val default: CoroutineDispatcher
+            get() = Dispatchers.Default
+        override val unconfined: CoroutineDispatcher
+            get() = Dispatchers.Unconfined
+    }
 }
