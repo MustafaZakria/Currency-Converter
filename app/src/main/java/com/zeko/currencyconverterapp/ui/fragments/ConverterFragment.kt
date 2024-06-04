@@ -2,6 +2,7 @@ package com.zeko.currencyconverterapp.ui.fragments
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,9 +14,9 @@ import com.zeko.currencyconverterapp.databinding.FragmentConverterBinding
 import com.zeko.currencyconverterapp.main.MainViewModel
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import dagger.hilt.EntryPoint
+import dagger.hilt.android.AndroidEntryPoint
 
-@EntryPoint
+@AndroidEntryPoint
 class ConverterFragment : Fragment() {
 
     lateinit var binding : FragmentConverterBinding
@@ -27,16 +28,21 @@ class ConverterFragment : Fragment() {
     ): View? {
         binding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_converter, container, false)
 
+        binding.viewModel = viewModel
+
         binding.lifecycleOwner = this
 
         binding.btnConvert.setOnClickListener{
             val currencyFrom = binding.spFromCurrency.selectedItem.toString()
             val currencyTo = binding.spToCurrency.selectedItem.toString()
-            val amount = binding.etAmount.toString()
+            val amount = binding.etAmount.text.toString()
 
-            viewModel.convert(currencyFrom, currencyTo, amount)
+            viewModel.convert(amount, currencyFrom, currencyTo)
         }
 
+
+        //Resolved with bindingadapter
+        /*
         viewModel.convertedValue.observe(viewLifecycleOwner, Observer { event ->
             when(event) {
                 is MainViewModel.CurrencyEvent.Success -> {
@@ -55,7 +61,13 @@ class ConverterFragment : Fragment() {
                 else -> Unit
             }
         })
+         */
         return binding.root
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        binding.unbind()
     }
 
 }
