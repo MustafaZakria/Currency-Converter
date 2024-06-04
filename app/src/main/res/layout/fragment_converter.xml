@@ -41,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/from"
-            app:layout_constraintStart_toStartOf="@+id/spToCurrency"
+            app:layout_constraintStart_toStartOf="@+id/spFromCurrency"
             app:layout_constraintTop_toTopOf="@id/guideline" />
 
         <TextView
@@ -49,7 +49,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/to"
-            app:layout_constraintStart_toStartOf="@+id/spFromCurrency"
+            app:layout_constraintStart_toStartOf="@+id/spToCurrency"
             app:layout_constraintTop_toTopOf="@id/guideline" />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -59,10 +59,10 @@
             android:layout_height="wrap_content"
             android:hint="@string/amount"
             android:layout_marginEnd="16dp"
-            app:layout_constraintBottom_toBottomOf="@+id/spToCurrency"
-            app:layout_constraintEnd_toStartOf="@+id/spToCurrency"
+            app:layout_constraintBottom_toBottomOf="@+id/spFromCurrency"
+            app:layout_constraintEnd_toStartOf="@+id/spFromCurrency"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/spToCurrency">
+            app:layout_constraintTop_toTopOf="@+id/spFromCurrency">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etAmount"
@@ -74,7 +74,7 @@
 
 
         <Spinner
-            android:id="@+id/spFromCurrency"
+            android:id="@+id/spToCurrency"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:entries="@array/currency_codes"
@@ -84,12 +84,12 @@
             app:layout_constraintTop_toBottomOf="@+id/tvTo" />
 
         <Spinner
-            android:id="@+id/spToCurrency"
+            android:id="@+id/spFromCurrency"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:entries="@array/currency_codes"
             android:padding="15dp"
-            app:layout_constraintEnd_toStartOf="@+id/spFromCurrency"
+            app:layout_constraintEnd_toStartOf="@+id/spToCurrency"
             app:layout_constraintTop_toBottomOf="@+id/tvFrom" />
 
         <Button
@@ -112,7 +112,8 @@
             app:layout_constraintEnd_toStartOf="@+id/btnConvert"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/btnConvert"
-            tools:text="5.99 USD" />
+            tools:text="5.99 USD"
+            app:textResult="@{viewModel.convertedValue}"/>
 
         <ProgressBar
             android:id="@+id/progressBar"
@@ -123,6 +124,7 @@
             app:layout_constraintEnd_toStartOf="@+id/btnConvert"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/btnConvert"
-            tools:visibility="visible" />
+            tools:visibility="visible"
+            app:progressBarStatus="@{viewModel.convertedValue}"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
