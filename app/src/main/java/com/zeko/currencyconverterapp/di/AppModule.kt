@@ -1,13 +1,16 @@
 package com.zeko.currencyconverterapp.di
 
+import android.app.Application
+import android.content.Context
 import com.zeko.currencyconverterapp.data.models.CurrencyApi
-import com.zeko.currencyconverterapp.main.DefaultMainRepository
-import com.zeko.currencyconverterapp.main.MainRepository
+import com.zeko.currencyconverterapp.repos.DefaultMainRepository
+import com.zeko.currencyconverterapp.repos.MainRepository
 import com.zeko.currencyconverterapp.util.Constants.BASE_URL
 import com.zeko.currencyconverterapp.util.DispatcherProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -42,4 +45,5 @@ object AppModule {
         override val unconfined: CoroutineDispatcher
             get() = Dispatchers.Unconfined
     }
+
 }

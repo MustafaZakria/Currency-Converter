@@ -1,38 +1,35 @@
 package com.zeko.currencyconverterapp.ui.fragments
 
-import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.zeko.currencyconverterapp.R
 import com.zeko.currencyconverterapp.databinding.FragmentConverterBinding
-import com.zeko.currencyconverterapp.main.MainViewModel
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
+import com.zeko.currencyconverterapp.ui.viewmodels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ConverterFragment : Fragment() {
 
-    lateinit var binding : FragmentConverterBinding
+    lateinit var binding: FragmentConverterBinding
     private val viewModel: MainViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_converter, container, false)
+        binding =
+            DataBindingUtil.inflate(layoutInflater, R.layout.fragment_converter, container, false)
 
         binding.viewModel = viewModel
 
         binding.lifecycleOwner = this
 
-        binding.btnConvert.setOnClickListener{
+        binding.btnConvert.setOnClickListener {
             val currencyFrom = binding.spFromCurrency.selectedItem.toString()
             val currencyTo = binding.spToCurrency.selectedItem.toString()
             val amount = binding.etAmount.text.toString()

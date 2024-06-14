@@ -1,14 +1,19 @@
-package com.zeko.currencyconverterapp.main
+package com.zeko.currencyconverterapp.ui.viewmodels
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.zeko.currencyconverterapp.data.models.Rates
+import com.zeko.currencyconverterapp.repos.MainRepository
 import com.zeko.currencyconverterapp.util.DispatcherProvider
+import com.zeko.currencyconverterapp.util.RateItem
 import com.zeko.currencyconverterapp.util.Resource
+import com.zeko.currencyconverterapp.util.getRateForCurrency
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.math.round
@@ -16,7 +21,8 @@ import kotlin.math.round
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val repo: MainRepository,
-    private val dispatchers: DispatcherProvider
+    private val dispatchers: DispatcherProvider,
+    @ApplicationContext context: Context
 ) : ViewModel() {
 
     sealed class CurrencyEvent() {
@@ -28,6 +34,33 @@ class MainViewModel @Inject constructor(
 
     private val _convertedValue = MutableLiveData<CurrencyEvent>(CurrencyEvent.Empty())
     val convertedValue: LiveData<CurrencyEvent> = _convertedValue
+
+    private val _rateItems = MutableLiveData<MutableList<RateItem>>(mutableListOf())
+    val rateItems: LiveData<MutableList<RateItem>> = _rateItems
+
+    private val supportedCurrencies = listOf("EGP", "AUD", "CAD", "EUR", "GBP", "HKD", "RUB", "USD")
+
+    fun loadRateItems() {
+        viewModelScope.launch(dispatchers.io) {
+            when (val ratesResponse = repo.getRates()) {
+                is Resource.Success -> {
+                    val rates = ratesResponse.data!!.rates
+                    val base = ratesResponse.data.base
+                    _rateItems.postValue(mutableListOf())
+                    for (curr in supportedCurrencies) {
+                        _rateItems.value?.apply {
+                            add(getRateItem(curr, rates))
+                            _rateItems.postValue(this)
+
+                        }
+                    }
+                }
+                is Resource.Error -> {
+                    Log.d("##", "Error in loading rate items")
+                }
+            }
+        }
+    }
 
     fun convert(
         amount: String,
@@ -49,7 +82,6 @@ class MainViewModel @Inject constructor(
                     val rates = ratesResponse.data!!.rates
                     val rateTo = getRateForCurrency(toCurrency, rates)?.toFloatOrNull()
                     val rateFrom = getRateForCurrency(fromCurrency, rates)?.toFloatOrNull()
-//                    Log.d("***", "$toCurrency --- ${rate.toString()}")
                     if (rateTo == null || rateFrom == null) {
                         _convertedValue.postValue(CurrencyEvent.Failure("Unexpected error"))
                     } else {
@@ -63,41 +95,18 @@ class MainViewModel @Inject constructor(
 
     }
 
-    private fun getRateForCurrency(currency: String, rates: Rates): String? {
-        return when (currency) {
-            "CAD" -> rates.CAD
-            "HKD" -> rates.HKD
-            "ISK" -> rates.ISK
-            "EUR" -> rates.EUR
-            "PHP" -> rates.PHP
-            "DKK" -> rates.DKK
-            "HUF" -> rates.HUF
-            "CZK" -> rates.CZK
-            "AUD" -> rates.AUD
-            "RON" -> rates.RON
-            "SEK" -> rates.SEK
-            "IDR" -> rates.IDR
-            "INR" -> rates.INR
-            "BRL" -> rates.BRL
-            "RUB" -> rates.RUB
-            "HRK" -> rates.HRK
-            "JPY" -> rates.JPY
-            "THB" -> rates.THB
-            "CHF" -> rates.CHF
-            "SGD" -> rates.SGD
-            "PLN" -> rates.PLN
-            "BGN" -> rates.BGN
-            "CNY" -> rates.CNY
-            "NOK" -> rates.NOK
-            "NZD" -> rates.NZD
-            "ZAR" -> rates.ZAR
-            "USD" -> rates.USD
-            "MXN" -> rates.MXN
-            "ILS" -> rates.ILS
-            "GBP" -> rates.GBP
-            "EGP" -> rates.EGP
-            else -> null
+
+    private fun getRateItem(currency: String, rates: Rates): RateItem {
+        // spinnerBase, responseBase
+
+        val rate = getRateForCurrency(currency, rates)
+        /*
+        if(spinnerBase != responseBase) {
+            spinnerRate = getRateForCurrency(currency, rates)
+            rate /= spinnerRate
         }
+         */
+        return RateItem(currency, rate!!.toDouble())
     }
 
 }

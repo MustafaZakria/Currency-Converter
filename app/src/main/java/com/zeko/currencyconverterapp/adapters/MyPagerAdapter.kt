@@ -1,4 +1,4 @@
-package com.zeko.currencyconverterapp.tablayout
+package com.zeko.currencyconverterapp.adapters
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager

@@ -1,4 +1,4 @@
-package com.zeko.currencyconverterapp.main
+package com.zeko.currencyconverterapp.repos
 
 import android.util.Log
 import com.zeko.currencyconverterapp.data.models.CurrencyApi
@@ -15,11 +15,9 @@ class DefaultMainRepository @Inject constructor(
         return try {
             val response = api.getRates()
             val result = response.body()
-            Log.d("***", result.toString())
             if(response.isSuccessful && result != null) {
                 Resource.Success(result)
             } else {
-                Log.d("***", result.toString())
                 Resource.Error(response.message())
             }
         } catch (e: Exception) {

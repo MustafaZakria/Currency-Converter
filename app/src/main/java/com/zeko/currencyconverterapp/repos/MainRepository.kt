@@ -1,4 +1,4 @@
-package com.zeko.currencyconverterapp.main
+package com.zeko.currencyconverterapp.repos
 
 import com.zeko.currencyconverterapp.data.models.CurrencyResponse
 import com.zeko.currencyconverterapp.util.Resource
