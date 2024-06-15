@@ -23,6 +23,8 @@ class RatesViewModel @Inject constructor(
         loadRateItems()
     }
 
+    private var spinnerValue = "USD"
+
     private val _rateItems = MutableLiveData<MutableList<RateItem>>(mutableListOf())
     val rateItems: LiveData<MutableList<RateItem>> = _rateItems
 
@@ -30,14 +32,14 @@ class RatesViewModel @Inject constructor(
 
     private fun loadRateItems() {
         viewModelScope.launch(dispatchers.io) {
+            _rateItems.postValue(mutableListOf())
             when (val ratesResponse = repo.getRates()) {
                 is Resource.Success -> {
                     val rates = ratesResponse.data!!.rates
                     val base = ratesResponse.data.base
-                    _rateItems.postValue(mutableListOf())
                     for (curr in supportedCurrencies) {
                         _rateItems.value?.apply {
-                            add(getRateItem(curr, rates))
+                            add(getRateItem(curr, rates, base))
                             _rateItems.postValue(this)
 
                         }
@@ -50,16 +52,20 @@ class RatesViewModel @Inject constructor(
         }
     }
 
-    private fun getRateItem(currency: String, rates: Rates): RateItem {
-        // spinnerBase, responseBase
+    private fun getRateItem(currency: String, rates: Rates, responseBase: String): RateItem {
 
-        val rate = getRateForCurrency(currency, rates)
-        /*
-        if(spinnerBase != responseBase) {
-            spinnerRate = getRateForCurrency(currency, rates)
-            rate /= spinnerRate
+        var rate = getRateForCurrency(currency, rates)!!.toDouble()
+
+        if (spinnerValue != responseBase) {
+            spinnerValue = getRateForCurrency(currency, rates)!!
+            rate /= spinnerValue.toDouble()
         }
-         */
-        return RateItem(currency, rate!!.toDouble())
+
+        return RateItem(currency, rate)
+    }
+
+    fun setSpinnerValue(value: String) {
+        spinnerValue = value
+        loadRateItems()
     }
 }

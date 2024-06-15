@@ -41,14 +41,14 @@
         <item>GBP</item>
     </string-array>
     <string-array name="rates">
-        <item>AUD</item>
+        <item>USD</item>
         <item>CAD</item>
         <item>EGP</item>
         <item>EUR</item>
         <item>GBP</item>
         <item>HKD</item>
         <item>RUB</item>
-        <item>USD</item>
+        <item>AUD</item>
     </string-array>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

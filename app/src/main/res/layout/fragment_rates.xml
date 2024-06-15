@@ -5,6 +5,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     >
 
+    <data>
+        <variable
+            name="viewModel"
+            type="com.zeko.currencyconverterapp.ui.viewmodels.RatesViewModel" />
+    </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -37,7 +42,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:background="@drawable/spinner_shape"
-            android:entries="@array/rates"/>
+            android:entries="@array/rates"
+            app:onItemSelected="@{viewModel}"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvRates"
