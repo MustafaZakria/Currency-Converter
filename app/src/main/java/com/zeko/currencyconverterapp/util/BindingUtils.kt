@@ -38,16 +38,17 @@ fun TextView.setResult(event: CurrencyEvent) {
 
 @BindingAdapter("currencyImage")
 fun ImageView.setCurrencyImage(rateItem: RateItem) {
-    when (rateItem.getCounty()) {
-        "EGP" -> this.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.egp))
-        "AUD" -> this.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.aud))
-        "CAD" -> this.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.cad))
-        "EUR" -> this.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.eur))
-        "GBP" -> this.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.gbp))
-        "HKD" -> this.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.hkd))
-        "RUB" -> this.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.rub))
-        "USD" -> this.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.usd))
-    }
+    this.setImageResource( when (rateItem.getCounty()) {
+        "EGP" -> R.drawable.egp
+        "AUD" -> R.drawable.aud
+        "CAD" -> R.drawable.cad
+        "EUR" -> R.drawable.eur
+        "GBP" -> R.drawable.gbp
+        "HKD" -> R.drawable.hkd
+        "RUB" -> R.drawable.rub
+        "USD" -> R.drawable.usd
+        else -> R.drawable.ic_launcher_foreground
+    })
 }
 
 @BindingAdapter("onItemSelected")

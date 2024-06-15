@@ -41,7 +41,7 @@ class RatesFragment : Fragment() {
                 binding.progressBar.isVisible = true
             } else {
                 binding.progressBar.isVisible = false
-                //adapter.submitList(it)
+                adapter.submitList(it)
             }
         })
     }
