@@ -1,4 +1,4 @@
-package com.zeko.currencyconverterapp.ui.fragments
+package com.zeko.currencyconverterapp.adapters
 
 import android.view.View
 import android.view.ViewGroup

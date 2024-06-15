@@ -35,32 +35,7 @@ class MainViewModel @Inject constructor(
     private val _convertedValue = MutableLiveData<CurrencyEvent>(CurrencyEvent.Empty())
     val convertedValue: LiveData<CurrencyEvent> = _convertedValue
 
-    private val _rateItems = MutableLiveData<MutableList<RateItem>>(mutableListOf())
-    val rateItems: LiveData<MutableList<RateItem>> = _rateItems
 
-    private val supportedCurrencies = listOf("EGP", "AUD", "CAD", "EUR", "GBP", "HKD", "RUB", "USD")
-
-    fun loadRateItems() {
-        viewModelScope.launch(dispatchers.io) {
-            when (val ratesResponse = repo.getRates()) {
-                is Resource.Success -> {
-                    val rates = ratesResponse.data!!.rates
-                    val base = ratesResponse.data.base
-                    _rateItems.postValue(mutableListOf())
-                    for (curr in supportedCurrencies) {
-                        _rateItems.value?.apply {
-                            add(getRateItem(curr, rates))
-                            _rateItems.postValue(this)
-
-                        }
-                    }
-                }
-                is Resource.Error -> {
-                    Log.d("##", "Error in loading rate items")
-                }
-            }
-        }
-    }
 
     fun convert(
         amount: String,
@@ -93,20 +68,6 @@ class MainViewModel @Inject constructor(
 
         }
 
-    }
-
-
-    private fun getRateItem(currency: String, rates: Rates): RateItem {
-        // spinnerBase, responseBase
-
-        val rate = getRateForCurrency(currency, rates)
-        /*
-        if(spinnerBase != responseBase) {
-            spinnerRate = getRateForCurrency(currency, rates)
-            rate /= spinnerRate
-        }
-         */
-        return RateItem(currency, rate!!.toDouble())
     }
 
 }
