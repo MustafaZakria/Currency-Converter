@@ -21,8 +21,7 @@ import kotlin.math.round
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val repo: MainRepository,
-    private val dispatchers: DispatcherProvider,
-    @ApplicationContext context: Context
+    private val dispatchers: DispatcherProvider
 ) : ViewModel() {
 
     sealed class CurrencyEvent() {

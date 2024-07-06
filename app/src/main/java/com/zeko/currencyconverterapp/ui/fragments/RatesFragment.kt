@@ -1,6 +1,7 @@
 package com.zeko.currencyconverterapp.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,9 +15,12 @@ import com.zeko.currencyconverterapp.R
 import com.zeko.currencyconverterapp.adapters.RateAdapter
 import com.zeko.currencyconverterapp.databinding.FragmentRatesBinding
 import com.zeko.currencyconverterapp.ui.viewmodels.RatesViewModel
+import com.zeko.currencyconverterapp.util.RateItem
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class RatesFragment : Fragment() {
-    lateinit var binding: FragmentRatesBinding
+    private lateinit var binding: FragmentRatesBinding
     private val viewModel: RatesViewModel by viewModels()
 
     override fun onCreateView(
@@ -25,6 +29,9 @@ class RatesFragment : Fragment() {
     ): View? {
 
         binding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_rates, container, false)
+
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = this
 
         setUpRecycleView()
         return binding.root
@@ -37,13 +44,18 @@ class RatesFragment : Fragment() {
         rvRater.layoutManager = LinearLayoutManager(requireContext())
 
         viewModel.rateItems.observe(viewLifecycleOwner, Observer {
-            if(it.isEmpty()) {
+            if (it.isEmpty()) {
                 binding.progressBar.isVisible = true
             } else {
                 binding.progressBar.isVisible = false
-                adapter.submitList(it)
+
+                Log.d("***", it.toString())
+                val spValue = viewModel.spinnerValue.value!!
+                val list = it.filter { item -> item.getCounty() != spValue }
+                adapter.submitList(list)
             }
         })
     }
+
 
 }

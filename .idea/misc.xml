@@ -12,6 +12,8 @@
         <entry key="..\:/Android/CurrencyConverterApp/app/src/main/res/layout/fragment_rates.xml" value="0.25" />
         <entry key="..\:/Android/CurrencyConverterApp/app/src/main/res/layout/item_rate.xml" value="0.25" />
         <entry key="..\:/Android/CurrencyConverterApp/app/src/main/res/layout/spinner_border.xml" value="0.25" />
+        <entry key="..\:/Android/CurrencyConverterApp/app/src/main/res/mipmap-anydpi-v26/ic_temp.xml" value="0.1" />
+        <entry key="..\:/Android/CurrencyConverterApp/app/src/main/res/mipmap-anydpi-v26/ic_temp_round.xml" value="0.1" />
       </map>
     </option>
   </component>
