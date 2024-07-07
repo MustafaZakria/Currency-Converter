@@ -1,11 +1,13 @@
 package com.zeko.currencyconverterapp.di
 
-import android.app.Application
 import android.content.Context
-import com.zeko.currencyconverterapp.data.models.CurrencyApi
+import android.content.SharedPreferences
+import com.zeko.currencyconverterapp.data.remote.CurrencyApi
 import com.zeko.currencyconverterapp.repos.DefaultMainRepository
 import com.zeko.currencyconverterapp.repos.MainRepository
+import com.zeko.currencyconverterapp.sharedPref.CurrencySharedPreference
 import com.zeko.currencyconverterapp.util.Constants.BASE_URL
+import com.zeko.currencyconverterapp.util.Constants.SHAREDPREFERENCE_NAME
 import com.zeko.currencyconverterapp.util.DispatcherProvider
 import dagger.Module
 import dagger.Provides
@@ -45,5 +47,18 @@ object AppModule {
         override val unconfined: CoroutineDispatcher
             get() = Dispatchers.Unconfined
     }
+
+    @Singleton
+    @Provides
+    fun provideSharedPreference(
+        @ApplicationContext context: Context
+    ) : SharedPreferences {
+        return context.getSharedPreferences(SHAREDPREFERENCE_NAME, Context.MODE_PRIVATE)
+    }
+
+    @Singleton
+    @Provides
+    fun provideCurrencySharedPreference(sharedPref: SharedPreferences) =
+        CurrencySharedPreference(sharedPref)
 
 }

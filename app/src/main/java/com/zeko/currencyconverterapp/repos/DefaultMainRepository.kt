@@ -1,7 +1,6 @@
 package com.zeko.currencyconverterapp.repos
 
-import android.util.Log
-import com.zeko.currencyconverterapp.data.models.CurrencyApi
+import com.zeko.currencyconverterapp.data.remote.CurrencyApi
 import com.zeko.currencyconverterapp.data.models.CurrencyResponse
 import com.zeko.currencyconverterapp.util.Resource
 import java.lang.Exception

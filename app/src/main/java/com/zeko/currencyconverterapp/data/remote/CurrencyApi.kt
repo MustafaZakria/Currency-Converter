@@ -1,5 +1,6 @@
-package com.zeko.currencyconverterapp.data.models
+package com.zeko.currencyconverterapp.data.remote
 
+import com.zeko.currencyconverterapp.data.models.CurrencyResponse
 import com.zeko.currencyconverterapp.util.Constants.API_KEY
 import retrofit2.Response
 import retrofit2.http.GET
