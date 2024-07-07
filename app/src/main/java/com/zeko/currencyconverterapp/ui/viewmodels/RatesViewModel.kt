@@ -87,7 +87,7 @@ class RatesViewModel @Inject constructor(
             for (item in this) {
                 if (item.getCurrency() == currency) {
                     val index = this.indexOf(item)
-                    this[index] = item.copy(isFavourite = true)
+                    this[index] = item.copy(isFavourite = !item.isFavourite)
                     break
                 }
             }
