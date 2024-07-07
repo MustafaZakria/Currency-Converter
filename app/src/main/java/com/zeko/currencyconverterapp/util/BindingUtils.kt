@@ -1,6 +1,7 @@
 package com.zeko.currencyconverterapp.util
 
 import android.graphics.Color
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.core.view.isVisible
@@ -34,7 +35,7 @@ fun TextView.setResult(event: CurrencyEvent) {
 
 @BindingAdapter("currencyImage")
 fun ImageView.setCurrencyImage(rateItem: RateItem) {
-    this.setImageResource( when (rateItem.getCounty()) {
+    this.setImageResource( when (rateItem.getCurrency()) {
         "EGP" -> R.drawable.egp
         "AUD" -> R.drawable.aud
         "CAD" -> R.drawable.cad
@@ -56,4 +57,12 @@ fun setOnItemSelected(spinner: Spinner, viewModel: RatesViewModel) {
 
         override fun onNothingSelected(parent: AdapterView<*>?) {}
     }
+}
+
+@BindingAdapter("setStarImage")
+fun ImageView.setStarImage(isFavourite: Boolean) {
+    this.setImageResource( when(isFavourite) {
+        true -> R.drawable.ic_star_filled
+        false -> R.drawable.ic_star_border
+    })
 }

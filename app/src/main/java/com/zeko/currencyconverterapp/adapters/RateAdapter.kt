@@ -8,13 +8,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.zeko.currencyconverterapp.databinding.ItemRateBinding
 import com.zeko.currencyconverterapp.util.RateItem
 
-class RateAdapter() :
+class RateAdapter(private val clickListener: FavRateClickListener) :
     ListAdapter<RateItem, RateAdapter.ViewHolder>(RateDiffCallBack()) {
 
     class ViewHolder private constructor(private val binding: ItemRateBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: RateItem?) {
+        fun bind(item: RateItem?, clickListener: FavRateClickListener) {
             binding.rateItem = item
+            binding.listener = clickListener
             binding.executePendingBindings()
         }
 
@@ -33,17 +34,22 @@ class RateAdapter() :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item)
+        holder.bind(item, clickListener)
     }
 
 }
 
 class RateDiffCallBack : DiffUtil.ItemCallback<RateItem>() {
     override fun areItemsTheSame(oldItem: RateItem, newItem: RateItem): Boolean {
-        return oldItem.toString() == newItem.toString()
+        return oldItem.toString() == newItem.toString() &&
+                oldItem.isFavourite == newItem.isFavourite
     }
 
     override fun areContentsTheSame(oldItem: RateItem, newItem: RateItem): Boolean {
         return oldItem.hashCode() == newItem.hashCode()
     }
+}
+
+class FavRateClickListener(val clickListener: (currency: String) -> Unit) {
+    fun onClick(cur: String) = clickListener(cur)
 }

@@ -12,10 +12,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.zeko.currencyconverterapp.R
+import com.zeko.currencyconverterapp.adapters.FavRateClickListener
 import com.zeko.currencyconverterapp.adapters.RateAdapter
 import com.zeko.currencyconverterapp.databinding.FragmentRatesBinding
 import com.zeko.currencyconverterapp.ui.viewmodels.RatesViewModel
-import com.zeko.currencyconverterapp.util.RateItem
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -38,20 +38,20 @@ class RatesFragment : Fragment() {
     }
 
     private fun setUpRecycleView() {
-        val adapter = RateAdapter()
+        val adapter = RateAdapter(FavRateClickListener { currency ->
+            viewModel.addFavRate(currency)
+        })
         val rvRater = binding.rvRates
         rvRater.adapter = adapter
         rvRater.layoutManager = LinearLayoutManager(requireContext())
 
-        viewModel.rateItems.observe(viewLifecycleOwner, Observer {
-            if (it.isEmpty()) {
+        viewModel.rateItems.observe(viewLifecycleOwner, Observer { rateItems ->
+            if (rateItems.isEmpty()) {
                 binding.progressBar.isVisible = true
             } else {
                 binding.progressBar.isVisible = false
-
-                Log.d("***", it.toString())
                 val spValue = viewModel.spinnerValue.value!!
-                val list = it.filter { item -> item.getCounty() != spValue }
+                val list = rateItems.filter { item -> item.getCurrency() != spValue }
                 adapter.submitList(list)
             }
         })

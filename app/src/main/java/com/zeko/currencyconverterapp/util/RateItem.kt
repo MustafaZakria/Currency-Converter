@@ -1,14 +1,22 @@
 package com.zeko.currencyconverterapp.util
 
 class RateItem(
-    private val country: String,
-    private val rate: Double
+    private val currency: String,
+    private val rate: Double,
+    var isFavourite: Boolean = false
 ) {
     override fun toString(): String {
-        return "$rate $country"
+        return "$rate $currency"
     }
 
-    fun getCounty() : String {
-        return country
+    fun getCurrency(): String {
+        return currency
+    }
+
+    fun copy(
+        currency: String = this.currency, rate: Double = this.rate,
+        isFavourite: Boolean = this.isFavourite
+    ): RateItem {
+        return RateItem(currency, rate, isFavourite)
     }
 }
