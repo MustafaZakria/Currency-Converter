@@ -108,7 +108,6 @@ class RatesViewModel @Inject constructor(
     }
 
     private fun isCurrencyFavourite(currency: String): Boolean {
-        Log.d("##", sharedPreference.getFavCurrencies().toString())
         return sharedPreference.getFavCurrencies()?.contains(currency) ?: false
     }
 

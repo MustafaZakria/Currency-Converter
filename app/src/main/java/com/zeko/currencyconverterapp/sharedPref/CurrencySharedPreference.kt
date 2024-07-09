@@ -8,7 +8,6 @@ class CurrencySharedPreference(private val sharedPreferences: SharedPreferences)
     fun putFavCurrency(currency: String) {
         val favCurrencies = sharedPreferences.getString(FAV_CURRENCY_KEY, "") + currency + " "
         sharedPreferences.edit().putString(FAV_CURRENCY_KEY, favCurrencies).apply()
-        Log.d("##", favCurrencies)
     }
 
     fun getFavCurrencies(): List<String>? {

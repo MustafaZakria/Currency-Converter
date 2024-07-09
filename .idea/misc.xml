@@ -9,10 +9,11 @@
         <entry key="..\:/Android/CurrencyConverterApp/app/src/main/res/drawable/ic_star_filled.xml" value="0.1385" />
         <entry key="..\:/Android/CurrencyConverterApp/app/src/main/res/drawable/ic_temp_background.xml" value="0.1765" />
         <entry key="..\:/Android/CurrencyConverterApp/app/src/main/res/drawable/spinner_shape.xml" value="0.184" />
-        <entry key="..\:/Android/CurrencyConverterApp/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Android/CurrencyConverterApp/app/src/main/res/layout/activity_main.xml" value="0.2" />
         <entry key="..\:/Android/CurrencyConverterApp/app/src/main/res/layout/fragment_converter.xml" value="0.264" />
         <entry key="..\:/Android/CurrencyConverterApp/app/src/main/res/layout/fragment_rates.xml" value="0.25" />
-        <entry key="..\:/Android/CurrencyConverterApp/app/src/main/res/layout/item_rate.xml" value="0.1" />
+        <entry key="..\:/Android/CurrencyConverterApp/app/src/main/res/layout/fragment_settings.xml" value="0.264" />
+        <entry key="..\:/Android/CurrencyConverterApp/app/src/main/res/layout/item_rate.xml" value="0.264" />
         <entry key="..\:/Android/CurrencyConverterApp/app/src/main/res/layout/spinner_border.xml" value="0.25" />
         <entry key="..\:/Android/CurrencyConverterApp/app/src/main/res/mipmap-anydpi-v26/ic_temp.xml" value="0.1" />
         <entry key="..\:/Android/CurrencyConverterApp/app/src/main/res/mipmap-anydpi-v26/ic_temp_round.xml" value="0.1" />
