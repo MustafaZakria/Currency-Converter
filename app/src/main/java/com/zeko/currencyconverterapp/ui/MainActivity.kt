@@ -1,19 +1,19 @@
 package com.zeko.currencyconverterapp.ui
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Menu
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.tabs.TabLayoutMediator
-import com.zeko.currencyconverterapp.databinding.ActivityMainBinding
 import com.zeko.currencyconverterapp.adapters.MyPagerAdapter
-import com.zeko.currencyconverterapp.ui.fragments.SettingsFragment
+import com.zeko.currencyconverterapp.databinding.ActivityMainBinding
+import com.zeko.currencyconverterapp.ui.fragments.ConverterFragment
+import com.zeko.currencyconverterapp.ui.fragments.RatesFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var  binding : ActivityMainBinding
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,19 +25,19 @@ class MainActivity : AppCompatActivity() {
         binding.ivSettings.setOnClickListener {
             navigateToSettingsFragment()
         }
-
     }
 
     private fun navigateToSettingsFragment() {
-//        val settingsFragment = SettingsFragment()
-//        supportFragmentManager.beginTransaction().rep
+        val intent = Intent(this, SettingsActivity::class.java)
+        startActivity(intent)
     }
 
     private fun setUpTabLayout() {
         val viewPager = binding.viewPager
         val tabLayout = binding.tbLayout
 
-        val adapter = MyPagerAdapter(supportFragmentManager, lifecycle)
+        val fragments = arrayOf(RatesFragment(), ConverterFragment())
+        val adapter = MyPagerAdapter(supportFragmentManager, lifecycle, fragments)
         viewPager.adapter = adapter
 
         TabLayoutMediator(tabLayout, viewPager) { tab, pos ->

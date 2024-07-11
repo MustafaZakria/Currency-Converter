@@ -51,7 +51,9 @@
         <item>AUD</item>
     </string-array>
     <string name="notification">NOTIFICATION</string>
+    <string name="settings">Settings</string>
     <string name="allow_notification">Allow notification every 12h</string>
     <string name="notification_base">Select a base currency</string>
     <string name="notification_base_info">choose a base currency which the rates should be appeared on the notification.</string>
+
 </resources>
