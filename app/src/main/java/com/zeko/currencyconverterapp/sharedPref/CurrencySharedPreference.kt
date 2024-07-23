@@ -1,8 +1,8 @@
 package com.zeko.currencyconverterapp.sharedPref
 
 import android.content.SharedPreferences
-import android.util.Log
 import com.zeko.currencyconverterapp.util.Constants.FAV_CURRENCY_KEY
+import com.zeko.currencyconverterapp.util.Constants.NOTIFICATION_CURRENCY_KEY
 
 class CurrencySharedPreference(private val sharedPreferences: SharedPreferences) {
     fun putFavCurrency(currency: String) {
@@ -18,13 +18,20 @@ class CurrencySharedPreference(private val sharedPreferences: SharedPreferences)
     fun removeFavCurrency(currency: String) {
         val list = sharedPreferences.getString(FAV_CURRENCY_KEY, "")?.split(" ")
         var result = ""
-        if(list?.contains(currency) == true) {
+        if (list?.contains(currency) == true) {
             list.forEach { item ->
-                if(item != currency) {
+                if (item != currency) {
                     result = "$result$item "
                 }
             }
         }
         sharedPreferences.edit().putString(FAV_CURRENCY_KEY, result).apply()
     }
+
+    fun putCurrencyToNotify(currency: String) {
+        sharedPreferences.edit().putString(NOTIFICATION_CURRENCY_KEY, currency).apply()
+    }
+
+    fun getCurrencyToNotify() = sharedPreferences.getString(NOTIFICATION_CURRENCY_KEY, "")
+
 }
