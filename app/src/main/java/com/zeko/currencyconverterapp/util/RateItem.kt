@@ -13,6 +13,10 @@ class RateItem(
         return currency
     }
 
+    fun getRate(): Double {
+        return rate
+    }
+
     fun copy(
         currency: String = this.currency, rate: Double = this.rate,
         isFavourite: Boolean = this.isFavourite

@@ -12,7 +12,7 @@ class CurrencySharedPreference(private val sharedPreferences: SharedPreferences)
 
     fun getFavCurrencies(): List<String>? {
         val favCurrencies = sharedPreferences.getString(FAV_CURRENCY_KEY, "")
-        return favCurrencies?.split(" ")
+        return favCurrencies?.split(Regex("\\s+"))?.filter { it.isNotEmpty() }
     }
 
     fun removeFavCurrency(currency: String) {

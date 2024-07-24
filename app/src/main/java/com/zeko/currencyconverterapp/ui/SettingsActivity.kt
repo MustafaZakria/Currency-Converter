@@ -2,13 +2,17 @@ package com.zeko.currencyconverterapp.ui
 
 import android.app.AlarmManager
 import android.app.PendingIntent
+import android.app.PendingIntent.FLAG_IMMUTABLE
+import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import androidx.appcompat.app.AppCompatActivity
 import com.zeko.currencyconverterapp.databinding.ActivitySettingsBinding
 import com.zeko.currencyconverterapp.sharedPref.CurrencySharedPreference
+import com.zeko.currencyconverterapp.service.CurrencyService
 import com.zeko.currencyconverterapp.util.Constants.INITIAL_DELAY
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -41,11 +45,11 @@ class SettingsActivity : AppCompatActivity() {
                     position: Int,
                     id: Long
                 ) {
-                    sharedPreference.putFavCurrency(selectedItem.toString())
+                    sharedPreference.putCurrencyToNotify(selectedItem.toString())
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
-                    sharedPreference.putFavCurrency(getItemAtPosition(0).toString())
+                    sharedPreference.putCurrencyToNotify(getItemAtPosition(0).toString())
                 }
 
             }
@@ -57,7 +61,7 @@ class SettingsActivity : AppCompatActivity() {
                 this,
                 0,
                 Intent(this, CurrencyService::class.java),
-                PendingIntent.FLAG_UPDATE_CURRENT
+                FLAG_IMMUTABLE
             )
             if (isChecked) {
                 val fireAt = System.currentTimeMillis() + INITIAL_DELAY.toLong()
@@ -67,6 +71,7 @@ class SettingsActivity : AppCompatActivity() {
                     AlarmManager.INTERVAL_HALF_DAY,
                     pendingIntent
                 )
+                Log.d("##", "fire the alarm manager!")
             } else {
                 alarmManager.cancel(pendingIntent)
             }

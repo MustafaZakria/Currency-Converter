@@ -14,7 +14,7 @@ class MyPagerAdapter(
 ) :
     FragmentStateAdapter(fragmentManager, lifecycle) {
 
-    private val tabsName = arrayOf(CONVERTER, RATES)
+    private val tabsName = arrayOf(RATES, CONVERTER)
 
     fun getPageTitle(position: Int): CharSequence = tabsName[position]
 

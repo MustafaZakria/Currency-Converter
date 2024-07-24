@@ -22,12 +22,12 @@
             android:layout_height="wrap_content"
             android:text="@string/currency_converter"
             android:textColor="@color/black"
-            android:textSize="35sp"
+            android:textSize="45sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/guideline"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:fontFamily="@font/"/>
+            android:fontFamily="@font/oleoscript"/>
 
 
         <androidx.constraintlayout.widget.Guideline

@@ -1,11 +1,19 @@
 package com.zeko.currencyconverterapp.di
 
+import android.app.AlarmManager
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
 import android.content.SharedPreferences
+import android.os.Build
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import com.zeko.currencyconverterapp.R
 import com.zeko.currencyconverterapp.data.remote.CurrencyApi
 import com.zeko.currencyconverterapp.repos.DefaultMainRepository
 import com.zeko.currencyconverterapp.repos.MainRepository
 import com.zeko.currencyconverterapp.sharedPref.CurrencySharedPreference
+import com.zeko.currencyconverterapp.util.Constants
 import com.zeko.currencyconverterapp.util.Constants.BASE_URL
 import com.zeko.currencyconverterapp.util.Constants.SHAREDPREFERENCE_NAME
 import com.zeko.currencyconverterapp.util.DispatcherProvider
@@ -13,6 +21,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.android.scopes.ServiceScoped
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -60,5 +69,11 @@ object AppModule {
     @Provides
     fun provideCurrencySharedPreference(sharedPref: SharedPreferences) =
         CurrencySharedPreference(sharedPref)
+
+    @Singleton
+    @Provides
+    fun provideAlarmManager(
+        @ApplicationContext context: Context
+    ): AlarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
 }

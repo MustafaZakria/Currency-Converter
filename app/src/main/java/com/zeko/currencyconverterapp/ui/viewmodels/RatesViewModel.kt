@@ -5,18 +5,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.zeko.currencyconverterapp.data.models.Rates
 import com.zeko.currencyconverterapp.repos.MainRepository
 import com.zeko.currencyconverterapp.sharedPref.CurrencySharedPreference
+import com.zeko.currencyconverterapp.util.*
 import com.zeko.currencyconverterapp.util.Constants.BASE
-import com.zeko.currencyconverterapp.util.DispatcherProvider
-import com.zeko.currencyconverterapp.util.RateItem
-import com.zeko.currencyconverterapp.util.Resource
-import com.zeko.currencyconverterapp.util.getRateForCurrency
+import com.zeko.currencyconverterapp.util.Util.calcCurrencyRate
+import com.zeko.currencyconverterapp.util.Util.isCurrencyFavourite
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.math.round
 
 @HiltViewModel
 class RatesViewModel @Inject constructor(
@@ -31,8 +28,6 @@ class RatesViewModel @Inject constructor(
     private val _rateItems = MutableLiveData<MutableList<RateItem>>(mutableListOf())
     val rateItems: LiveData<MutableList<RateItem>> = _rateItems
 
-    val favRates = rateItems.value?.filter { it.isFavourite }
-
     private val supportedCurrencies = listOf("EGP", "AUD", "CAD", "EUR", "GBP", "HKD", "RUB", "USD")
 
     private fun loadRateValues() {
@@ -43,7 +38,10 @@ class RatesViewModel @Inject constructor(
                     val rates = ratesResponse.data!!.rates
                     for (curr in supportedCurrencies) {
                         _rateItems.value?.apply {
-                            add(calcRateItem(curr, rates, isCurrencyFavourite(curr)))
+                            val spValue = _spinnerValue.value ?: BASE
+                            val currencyRate = calcCurrencyRate(curr, rates, spValue)
+                            val isFav = isCurrencyFavourite(curr, sharedPreference)
+                            add(RateItem(curr, currencyRate, isFav))
                             _rateItems.postValue(this)
                         }
                     }
@@ -66,27 +64,6 @@ class RatesViewModel @Inject constructor(
         }
     }
 
-    private fun calcRateItem(
-        currency: String,
-        rates: Rates,
-        isFav: Boolean,
-        responseBase: String = BASE
-    ): RateItem {
-        var rate = getRateForCurrency(currency, rates)!!.toDouble()
-        _spinnerValue.value?.let {
-            if (it != responseBase) {
-                val spValue = getRateForCurrency(it, rates)!!
-                rate /= spValue.toDouble()
-            }
-        }
-
-        rate = round(rate * 100) / 100
-        return RateItem(currency, rate, isFav)
-    }
-
-    private fun findRateItem(currency: String, copiedRates: MutableList<RateItem>?): RateItem? {
-        return copiedRates?.find { it.getCurrency() == currency }
-    }
 
     fun setSpValue(value: String) {
         _spinnerValue.postValue(value)
@@ -107,12 +84,9 @@ class RatesViewModel @Inject constructor(
         orderRates()
     }
 
-    private fun isCurrencyFavourite(currency: String): Boolean {
-        return sharedPreference.getFavCurrencies()?.contains(currency) ?: false
-    }
 
     private fun putToSharedPref(item: RateItem) {
-        if(item.isFavourite) {
+        if (item.isFavourite) {
             sharedPreference.putFavCurrency(item.getCurrency())
         } else {
             sharedPreference.removeFavCurrency(item.getCurrency())

@@ -1,8 +1,6 @@
 package com.zeko.currencyconverterapp.util
 
 object Constants {
-    const val NUM_TABS = 2
-
     const val CONVERTER = "CONVERTER"
     const val RATES = "RATES"
 
@@ -13,4 +11,13 @@ object Constants {
 
     const val SHAREDPREFERENCE_NAME = "currency SharedPref"
     const val FAV_CURRENCY_KEY = "favourite"
+    const val NOTIFICATION_CURRENCY_KEY = "notification currency"
+
+    const val CHANNEL_ID = "Channel id"
+    const val CHANNEL_NAME = "Channel name"
+
+    const val NOTIFICATION_TITLE = "Check recent rates!"
+    const val NOTIFICATION_ID = 1
+
+    const val INITIAL_DELAY = "6000"
 }

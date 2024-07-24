@@ -11,7 +11,7 @@ import com.zeko.currencyconverterapp.repos.MainRepository
 import com.zeko.currencyconverterapp.util.DispatcherProvider
 import com.zeko.currencyconverterapp.util.RateItem
 import com.zeko.currencyconverterapp.util.Resource
-import com.zeko.currencyconverterapp.util.getRateForCurrency
+import com.zeko.currencyconverterapp.util.Util.getRateForCurrency
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
