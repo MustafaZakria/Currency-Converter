@@ -3,7 +3,6 @@ package com.zeko.currencyconverterapp.ui
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_IMMUTABLE
-import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -11,8 +10,8 @@ import android.view.View
 import android.widget.AdapterView
 import androidx.appcompat.app.AppCompatActivity
 import com.zeko.currencyconverterapp.databinding.ActivitySettingsBinding
-import com.zeko.currencyconverterapp.sharedPref.CurrencySharedPreference
 import com.zeko.currencyconverterapp.service.CurrencyService
+import com.zeko.currencyconverterapp.sharedPref.CurrencySharedPreference
 import com.zeko.currencyconverterapp.util.Constants.INITIAL_DELAY
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -56,6 +55,11 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         val switch = binding.switch1
+
+        if (sharedPreference.isSwitchChecked()) {
+            switch.isChecked = true
+        }
+
         switch.setOnCheckedChangeListener { _, isChecked ->
             val pendingIntent = PendingIntent.getService(
                 this,
@@ -75,6 +79,7 @@ class SettingsActivity : AppCompatActivity() {
             } else {
                 alarmManager.cancel(pendingIntent)
             }
+            sharedPreference.setSwitchChecked(isChecked)
         }
 
     }

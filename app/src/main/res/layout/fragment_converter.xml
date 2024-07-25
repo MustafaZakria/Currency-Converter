@@ -17,17 +17,30 @@
         tools:context=".ui.fragments.ConverterFragment">
 
         <TextView
-            android:id="@+id/tvTitle"
+            android:id="@+id/tvTitle1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/currency_converter"
-            android:textColor="@color/black"
+            android:fontFamily="@font/oleoscript"
+            android:text="@string/currency"
+            android:textColor="@color/teal_500"
             android:textSize="45sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/guideline"
+            android:layout_marginTop="50dp"
+            app:layout_constraintEnd_toStartOf="@+id/tvTitle2"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:fontFamily="@font/oleoscript"/>
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvTitle2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/oleoscript"
+            android:text="@string/converter"
+            android:textColor="@color/teal_500"
+            android:textSize="45sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/tvTitle1"
+            app:layout_constraintTop_toBottomOf="@+id/tvTitle1" />
 
 
         <androidx.constraintlayout.widget.Guideline
@@ -101,6 +114,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/spFromCurrency"
             android:layout_marginTop="16dp"
+            android:backgroundTint="@color/teal_200"
             />
 
         <TextView

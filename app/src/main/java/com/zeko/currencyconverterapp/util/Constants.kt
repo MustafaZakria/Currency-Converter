@@ -12,6 +12,7 @@ object Constants {
     const val SHAREDPREFERENCE_NAME = "currency SharedPref"
     const val FAV_CURRENCY_KEY = "favourite"
     const val NOTIFICATION_CURRENCY_KEY = "notification currency"
+    const val SWITCH_CHECK_KEY = "switch check"
 
     const val CHANNEL_ID = "Channel id"
     const val CHANNEL_NAME = "Channel name"

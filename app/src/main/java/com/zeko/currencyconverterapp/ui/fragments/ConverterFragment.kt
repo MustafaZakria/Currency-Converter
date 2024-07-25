@@ -38,27 +38,6 @@ class ConverterFragment : Fragment() {
         }
 
 
-        //Resolved with bindingadapter
-        /*
-        viewModel.convertedValue.observe(viewLifecycleOwner, Observer { event ->
-            when(event) {
-                is MainViewModel.CurrencyEvent.Success -> {
-                    binding.progressBar.isVisible = false
-                    binding.tvResult.text = event.resultText
-                    binding.tvResult.setTextColor(Color.BLACK)
-                }
-                is MainViewModel.CurrencyEvent.Failure -> {
-                    binding.progressBar.isVisible = false
-                    binding.tvResult.text = event.errorText
-                    binding.tvResult.setTextColor(Color.RED)
-                }
-                is MainViewModel.CurrencyEvent.Loading -> {
-                    binding.progressBar.isVisible = true
-                }
-                else -> Unit
-            }
-        })
-         */
         return binding.root
     }
 

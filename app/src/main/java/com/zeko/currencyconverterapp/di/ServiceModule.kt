@@ -2,11 +2,15 @@ package com.zeko.currencyconverterapp.di
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
+import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.zeko.currencyconverterapp.R
+import com.zeko.currencyconverterapp.ui.MainActivity
 import com.zeko.currencyconverterapp.util.Constants.CHANNEL_ID
 import com.zeko.currencyconverterapp.util.Constants.CHANNEL_NAME
 import com.zeko.currencyconverterapp.util.Constants.NOTIFICATION_TITLE
@@ -46,6 +50,12 @@ object ServiceModule {
         return NotificationCompat.Builder(context, CHANNEL_ID)
             .setContentTitle(NOTIFICATION_TITLE)
             .setSmallIcon(R.drawable.notification_icon)
+            .setContentIntent(
+                PendingIntent.getActivity(
+                    context, 2, Intent(context, MainActivity::class.java),
+                    FLAG_IMMUTABLE
+                )
+            )
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
     }
 

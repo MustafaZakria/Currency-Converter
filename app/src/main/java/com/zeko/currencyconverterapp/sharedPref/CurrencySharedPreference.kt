@@ -3,6 +3,7 @@ package com.zeko.currencyconverterapp.sharedPref
 import android.content.SharedPreferences
 import com.zeko.currencyconverterapp.util.Constants.FAV_CURRENCY_KEY
 import com.zeko.currencyconverterapp.util.Constants.NOTIFICATION_CURRENCY_KEY
+import com.zeko.currencyconverterapp.util.Constants.SWITCH_CHECK_KEY
 
 class CurrencySharedPreference(private val sharedPreferences: SharedPreferences) {
     fun putFavCurrency(currency: String) {
@@ -34,4 +35,7 @@ class CurrencySharedPreference(private val sharedPreferences: SharedPreferences)
 
     fun getCurrencyToNotify() = sharedPreferences.getString(NOTIFICATION_CURRENCY_KEY, "")
 
+    fun isSwitchChecked(): Boolean = sharedPreferences.getBoolean(SWITCH_CHECK_KEY, false)
+
+    fun setSwitchChecked(isChecked: Boolean) = sharedPreferences.edit().putBoolean(SWITCH_CHECK_KEY, isChecked).apply()
 }
