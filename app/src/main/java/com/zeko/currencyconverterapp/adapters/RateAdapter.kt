@@ -1,5 +1,6 @@
 package com.zeko.currencyconverterapp.adapters
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -36,7 +37,6 @@ class RateAdapter(private val clickListener: FavRateClickListener) :
         val item = getItem(position)
         holder.bind(item, clickListener)
     }
-
 }
 
 class RateDiffCallBack : DiffUtil.ItemCallback<RateItem>() {
@@ -50,6 +50,6 @@ class RateDiffCallBack : DiffUtil.ItemCallback<RateItem>() {
     }
 }
 
-class FavRateClickListener(val clickListener: (currency: String) -> Unit) {
-    fun onClick(cur: String) = clickListener(cur)
+class FavRateClickListener(val clickListener: (rateItem: RateItem) -> Unit) {
+    fun onClick(rateItem: RateItem) = clickListener(rateItem)
 }

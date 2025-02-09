@@ -1,6 +1,6 @@
 package com.zeko.currencyconverterapp.util
 
-class RateItem(
+data class RateItem(
     private val currency: String,
     private val rate: Double,
     var isFavourite: Boolean = false
@@ -17,10 +17,4 @@ class RateItem(
         return rate
     }
 
-    fun copy(
-        currency: String = this.currency, rate: Double = this.rate,
-        isFavourite: Boolean = this.isFavourite
-    ): RateItem {
-        return RateItem(currency, rate, isFavourite)
-    }
 }

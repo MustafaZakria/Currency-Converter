@@ -14,7 +14,9 @@ import com.zeko.currencyconverterapp.util.RateItem
 import com.zeko.currencyconverterapp.util.Resource
 import com.zeko.currencyconverterapp.util.Util.calcCurrencyRate
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -41,12 +43,11 @@ class CurrencyService : LifecycleService() {
     override fun onCreate() {
         super.onCreate()
         scope = CoroutineScope(dispatcher.io + job)
-        Log.d("##", "on create!")
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
-        Log.d("##", "on start command!")
+
         scope.launch {
             val rates = loadFavRates()
             notificationBuilder.setContentText(getNotificationText(rates))
@@ -76,26 +77,26 @@ class CurrencyService : LifecycleService() {
 
     private suspend fun loadFavRates(): MutableList<RateItem> {
         val result = mutableListOf<RateItem>()
-        return scope.async {
-            when (val rates = repo.getRates()) {
-                is Resource.Success -> {
-                    rates.data?.rates?.let {
-                        val base = sharedPreference.getCurrencyToNotify() ?: BASE
-                        sharedPreference.getFavCurrencies()?.forEach { curr ->
-                            Log.d("##", curr)
-                            if (curr != base) {
-                                val rate = calcCurrencyRate(curr, it, base)
-                                result.add(RateItem(curr, rate, true))
-                            }
+//        return scope.async {
+        when (val rates = repo.getRates()) {
+            is Resource.Success -> {
+                rates.data?.rates?.let {
+                    val base = sharedPreference.getCurrencyToNotify() ?: BASE
+                    sharedPreference.getFavCurrencies()?.forEach { curr ->
+                        if (curr != base) {
+                            val rate = calcCurrencyRate(curr, it, base)
+                            result.add(RateItem(curr, rate))
                         }
                     }
                 }
-                else -> {
-                    Log.d("##", "Error in loading rate items")
-                }
             }
-            return@async result
-        }.await()
+
+            else -> {
+                Log.d("##", "Error in loading rate items")
+            }
+        }
+        return result
+//        }.await()
     }
 
     override fun onDestroy() {

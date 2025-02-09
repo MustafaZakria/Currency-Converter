@@ -63,7 +63,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             tools:srcCompat="@drawable/ic_star_border"
             app:setStarImage="@{rateItem.isFavourite}"
-            android:onClick="@{() -> listener.onClick(rateItem.getCurrency())}"/>
+            android:onClick="@{() -> listener.onClick(rateItem)}"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

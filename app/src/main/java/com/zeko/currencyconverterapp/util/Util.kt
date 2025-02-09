@@ -2,6 +2,7 @@ package com.zeko.currencyconverterapp.util
 
 import com.zeko.currencyconverterapp.data.models.Rates
 import com.zeko.currencyconverterapp.sharedPref.CurrencySharedPreference
+import java.util.LinkedList
 import kotlin.math.round
 
 object Util {
@@ -59,7 +60,8 @@ object Util {
         return rate
     }
 
-    fun isCurrencyFavourite(currency: String, sharedPref: CurrencySharedPreference): Boolean {
-        return sharedPref.getFavCurrencies()?.contains(currency) ?: false
+    fun isCurrencyFavourite(currency: String, favs: List<String>?): Boolean {
+        return favs?.contains(currency) ?: false
     }
+
 }

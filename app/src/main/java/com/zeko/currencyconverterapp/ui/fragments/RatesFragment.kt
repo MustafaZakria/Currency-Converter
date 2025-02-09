@@ -38,8 +38,8 @@ class RatesFragment : Fragment() {
     }
 
     private fun setUpRecycleView() {
-        val adapter = RateAdapter(FavRateClickListener { currency ->
-            viewModel.addFavRate(currency)
+        val adapter = RateAdapter(FavRateClickListener { rateItem ->
+            viewModel.addFavRate(rateItem)
         })
         val rvRater = binding.rvRates
         rvRater.adapter = adapter
