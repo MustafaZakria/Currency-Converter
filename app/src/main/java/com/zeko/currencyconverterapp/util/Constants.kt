@@ -20,5 +20,7 @@ object Constants {
     const val NOTIFICATION_TITLE = "Check recent rates!"
     const val NOTIFICATION_ID = 1
 
+    const val UNIQUE_WORK_NAME = "CurrencyUpdatesWorker"
+
     const val INITIAL_DELAY = "6000"
 }

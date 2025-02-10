@@ -1,19 +1,28 @@
 package com.zeko.currencyconverterapp.ui
 
-import android.app.AlarmManager
-import android.app.PendingIntent
-import android.app.PendingIntent.FLAG_IMMUTABLE
-import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.work.Constraints
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.NetworkType
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.workDataOf
 import com.zeko.currencyconverterapp.databinding.ActivitySettingsBinding
-import com.zeko.currencyconverterapp.service.CurrencyService
 import com.zeko.currencyconverterapp.sharedPref.CurrencySharedPreference
-import com.zeko.currencyconverterapp.util.Constants.INITIAL_DELAY
+import com.zeko.currencyconverterapp.util.Constants.UNIQUE_WORK_NAME
+import com.zeko.currencyconverterapp.worker.CurrencyUpdatesWorker
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -23,9 +32,10 @@ class SettingsActivity : AppCompatActivity() {
     @Inject
     lateinit var sharedPreference: CurrencySharedPreference
 
-    @Inject
-    lateinit var alarmManager: AlarmManager
 
+    lateinit var workerManager: WorkManager
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -54,34 +64,78 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
 
+        val launcher = registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted ->
+            if (isGranted) {
+                launchWorker()
+            } else {
+                Toast.makeText(
+                    this,
+                    "Access Denied!",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+
         val switch = binding.switch1
 
         if (sharedPreference.isSwitchChecked()) {
             switch.isChecked = true
         }
 
+        workerManager = WorkManager.getInstance(this)
+
         switch.setOnCheckedChangeListener { _, isChecked ->
-            val pendingIntent = PendingIntent.getService(
-                this,
-                0,
-                Intent(this, CurrencyService::class.java),
-                FLAG_IMMUTABLE
-            )
+
             if (isChecked) {
-                val fireAt = System.currentTimeMillis() + INITIAL_DELAY.toLong()
-                alarmManager.setInexactRepeating(
-                    AlarmManager.RTC_WAKEUP,
-                    fireAt,
-                    AlarmManager.INTERVAL_HALF_DAY,
-                    pendingIntent
-                )
-                Log.d("##", "fire the alarm manager!")
+                if (ActivityCompat.checkSelfPermission(
+                        this,
+                        android.Manifest.permission.POST_NOTIFICATIONS
+                    ) == PackageManager.PERMISSION_GRANTED
+                ) {
+                    launchWorker()
+                } else {
+                    launcher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+                }
             } else {
-                alarmManager.cancel(pendingIntent)
+                workerManager.cancelAllWork()
             }
+
             sharedPreference.setSwitchChecked(isChecked)
         }
 
+    }
+
+    private fun launchWorker() {
+        Log.d("***", "Here")
+        val constraints = Constraints.Builder()
+            .build()
+
+        val request = PeriodicWorkRequestBuilder<CurrencyUpdatesWorker>(
+            15,
+            TimeUnit.MINUTES
+        )
+            .setInputData(
+                workDataOf(
+                    CurrencyUpdatesWorker.FAV_CURRENCIES to sharedPreference.getFavCurrencies()
+                        ?.joinToString(","),
+                    CurrencyUpdatesWorker.BASE_CURRENCY to sharedPreference.getCurrencyToNotify()
+                )
+            )
+            .setConstraints(constraints)
+            .build()
+        Log.d("***", "Here2")
+        workerManager.enqueueUniquePeriodicWork(
+            UNIQUE_WORK_NAME,
+            ExistingPeriodicWorkPolicy.REPLACE,
+            request
+        ).also { operation ->
+            operation.result.addListener(
+                { Log.d("***", "Worker enqueued: ${operation.state}") },
+                { Runnable::run }
+            )
+        }
     }
 
     private fun returnToMain() {

@@ -42,7 +42,7 @@ class RateAdapter(private val clickListener: FavRateClickListener) :
 class RateDiffCallBack : DiffUtil.ItemCallback<RateItem>() {
     override fun areItemsTheSame(oldItem: RateItem, newItem: RateItem): Boolean {
         return oldItem.toString() == newItem.toString() &&
-                oldItem.isFavourite == newItem.isFavourite
+                oldItem.getFavouriteStatus() == newItem.getFavouriteStatus()
     }
 
     override fun areContentsTheSame(oldItem: RateItem, newItem: RateItem): Boolean {

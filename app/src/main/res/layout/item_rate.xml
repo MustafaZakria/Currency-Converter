@@ -62,7 +62,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             tools:srcCompat="@drawable/ic_star_border"
-            app:setStarImage="@{rateItem.isFavourite}"
+            app:setStarImage="@{rateItem.getFavouriteStatus()}"
             android:onClick="@{() -> listener.onClick(rateItem)}"/>
 
 

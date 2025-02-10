@@ -88,7 +88,7 @@ class RatesViewModel @Inject constructor(
     fun addFavRate(rateItem: RateItem) {
         _rateItems.value?.apply {
             remove(rateItem)
-            val newRateItem = rateItem.copy(isFavourite = !rateItem.isFavourite)
+            val newRateItem = rateItem.copy(isFavourite = !rateItem.getFavouriteStatus())
             addRateItem(newRateItem)
             putToSharedPref(newRateItem)
             _rateItems.postValue(this)
@@ -97,7 +97,7 @@ class RatesViewModel @Inject constructor(
 
 
     private fun putToSharedPref(item: RateItem) {
-        if (item.isFavourite) {
+        if (item.getFavouriteStatus()) {
             sharedPreference.putFavCurrency(item.getCurrency())
         } else {
             sharedPreference.removeFavCurrency(item.getCurrency())
@@ -105,7 +105,7 @@ class RatesViewModel @Inject constructor(
     }
 
     private fun LinkedList<RateItem>.addRateItem(rateItem: RateItem) {
-        if (rateItem.isFavourite) {
+        if (rateItem.getFavouriteStatus()) {
             addFirst(rateItem)
         } else {
             addLast(rateItem)
