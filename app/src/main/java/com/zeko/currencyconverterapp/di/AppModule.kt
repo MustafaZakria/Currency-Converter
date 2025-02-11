@@ -1,6 +1,5 @@
 package com.zeko.currencyconverterapp.di
 
-import android.app.AlarmManager
 import android.content.Context
 import android.content.SharedPreferences
 import com.zeko.currencyconverterapp.data.remote.CurrencyApi
@@ -62,10 +61,8 @@ object AppModule {
     fun provideCurrencySharedPreference(sharedPref: SharedPreferences) =
         CurrencySharedPreference(sharedPref)
 
-    @Singleton
-    @Provides
-    fun provideAlarmManager(
-        @ApplicationContext context: Context
-    ): AlarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
 }
+
+
+

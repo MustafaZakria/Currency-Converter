@@ -23,6 +23,7 @@ import com.zeko.currencyconverterapp.util.Constants.NOTIFICATION_TITLE
 import com.zeko.currencyconverterapp.util.RateItem
 import com.zeko.currencyconverterapp.util.Resource
 import com.zeko.currencyconverterapp.util.Util.calcCurrencyRate
+import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -30,14 +31,17 @@ import retrofit2.HttpException
 
 @HiltWorker
 class CurrencyUpdatesWorker @AssistedInject constructor(
-    val context: Context,
-    val params: WorkerParameters,
+    @Assisted val context: Context,
+    @Assisted val params: WorkerParameters,
     private val repository: MainRepository
 ) : CoroutineWorker(context, params) {
 
 
+    override suspend fun getForegroundInfo(): ForegroundInfo {
+        return ForegroundInfo(NOTIFICATION_ID, createNotification().build())
+    }
+
     override suspend fun doWork(): Result = try {
-        Log.d("***", "Here Worker")
         val rates = withContext(Dispatchers.IO) { loadFavRates() }
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val notificationBuilder = createNotification().setContentText(getNotificationText(rates))
@@ -47,8 +51,6 @@ class CurrencyUpdatesWorker @AssistedInject constructor(
     } catch (e: HttpException) {
         Result.retry()
     }
-
-
 
     private suspend fun loadFavRates(): MutableList<RateItem> {
         val result = mutableListOf<RateItem>()

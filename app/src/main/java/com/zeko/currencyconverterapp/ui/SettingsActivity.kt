@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
-import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
@@ -33,7 +32,7 @@ class SettingsActivity : AppCompatActivity() {
     lateinit var sharedPreference: CurrencySharedPreference
 
 
-    lateinit var workerManager: WorkManager
+    private lateinit var workerManager: WorkManager
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -108,34 +107,30 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun launchWorker() {
-        Log.d("***", "Here")
         val constraints = Constraints.Builder()
             .build()
 
         val request = PeriodicWorkRequestBuilder<CurrencyUpdatesWorker>(
-            15,
-            TimeUnit.MINUTES
+            12,
+            TimeUnit.HOURS
         )
             .setInputData(
                 workDataOf(
-                    CurrencyUpdatesWorker.FAV_CURRENCIES to sharedPreference.getFavCurrencies()
-                        ?.joinToString(","),
-                    CurrencyUpdatesWorker.BASE_CURRENCY to sharedPreference.getCurrencyToNotify()
+                    CurrencyUpdatesWorker.FAV_CURRENCIES to (sharedPreference.getFavCurrencies()
+                        ?.joinToString(",") ?: ""),
+                    CurrencyUpdatesWorker.BASE_CURRENCY to (sharedPreference.getCurrencyToNotify()
+                        ?: "")
                 )
             )
             .setConstraints(constraints)
             .build()
-        Log.d("***", "Here2")
+
         workerManager.enqueueUniquePeriodicWork(
             UNIQUE_WORK_NAME,
             ExistingPeriodicWorkPolicy.REPLACE,
             request
-        ).also { operation ->
-            operation.result.addListener(
-                { Log.d("***", "Worker enqueued: ${operation.state}") },
-                { Runnable::run }
-            )
-        }
+        )
+
     }
 
     private fun returnToMain() {
